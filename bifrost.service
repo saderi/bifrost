@@ -1,11 +1,11 @@
 [Unit]
-Description=Notify Proxy
+Description=Bifrost
 After=network.target
 
 [Service]
-VIRTUAL_ENV=/opt/notify-proxy/venv
-WorkingDirectory=/opt/notify-proxy
-ExecStart=/opt/notify-proxy/venv/bin/flask run --port 7001
+VIRTUAL_ENV=/opt/bifrost/venv
+WorkingDirectory=/opt/bifrost
+ExecStart=/opt/bifrost/venv/bin/flask run
 Restart=always
 
 [Install]
