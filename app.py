@@ -43,7 +43,7 @@ def send_telegram():
     response = requests.post(url, json=payload)
     return response.json()
 
-@app.route('/', methods=['GET','POST'])
+@app.route('/', methods=['GET'])
 def index():
     return jsonify({"message": "Hello, World!"}, 200)
 

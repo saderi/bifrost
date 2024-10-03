@@ -29,25 +29,31 @@ This is a simple API to pypass API calls to some services, for now it only has a
     Update `TOKEN_SECRET` in the `.env` file. this token will be used to authenticate the requests. IS NOT RELATED TO THE TELEGRAM TOKEN.
 ## Running the Application
 
-1. **Start the Flask application:**
-    ```sh
-    flask run --host=0.0.0.0 --port=5000
-    ```
+Start the Flask application for development
 
-2. **Start the service using systemd:**
-    ```sh
-    sudo cp bifrost.service /etc/systemd/system/
-    sudo systemctl daemon-reload
-    sudo systemctl start bifrost.service
-    sudo systemctl enable bifrost.service
-    ```
+```sh
+flask run
+```
+
+**Some notes for production:**
+
+If you want to run it in production do not expose the flask app directly to the internet, use a reverse proxy like nginx or apache.
+
+You can get systemd service file from the repository and use it to start the service using systemd.
+
+```sh
+sudo cp bifrost.service /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl start bifrost.service
+sudo systemctl enable bifrost.service
+```
 
 ## Endpoints
 
 | Endpoint | Method | Description |
 | --- | --- | --- |
-| `/` | POST/GET | Health check endpoint. |
-| `/send_telegram` | POST | Restart API and Worker services. |
+| `/` | GET | Health check endpoint. |
+| `/send_telegram` | POST | Send a message to a telegram chat. |
 
 
 ## send_telegram
