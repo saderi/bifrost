@@ -1,4 +1,4 @@
-# bifrost
+# Bifrost
 
 Some countries have restrictions on the internet, and some services are blocked. This can be a problem when you need to send a message to a chat, or make a request to a service. this is where bifrost comes in.
 
