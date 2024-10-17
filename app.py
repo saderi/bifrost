@@ -12,6 +12,9 @@ API_ACCESS_TOKEN = os.getenv('API_ACCESS_TOKEN', 'default_secret_token')
 
 
 def authenticate(f):
+    """
+    Decorator function to authenticate requests using a Bearer token.
+    """
     def wrapper(*args, **kwargs):
         auth_header = request.headers.get('Authorization')
         if not auth_header or not auth_header.startswith('Bearer '):
@@ -62,14 +65,12 @@ def send_request():
     headers = data.get('headers') if data.get('headers') else None
     if url is None:
         return jsonify({"error": "URL is required"}), 400
-    
     if method == 'GET':
         response = requests.get(url, headers=headers)
     elif method == 'POST':
         response = requests.post(url, json=json_payload, headers=headers)
     else:
         return jsonify({"error": f"Method {method} is not supported"}), 400
-    
     return response.json(), response.status_code
 
 
