@@ -1,7 +1,10 @@
+"""
+This module contains the main application code for a Flask web server.
+"""
+import os
 import requests
 from flask import Flask, request, jsonify
 from dotenv import load_dotenv
-import os
 
 load_dotenv()
 app = Flask(__name__)
@@ -23,6 +26,9 @@ def authenticate(f):
 @app.route('/send_telegram', methods=['POST'])
 @authenticate
 def send_telegram():
+    """
+    Handle POST requests to send a message to a Telegram chat.
+    """
     data = request.get_json()
     telegram_bot_token = data.get('telegram_bot_token')
     telegram_chat_id = data.get('telegram_chat_id')
@@ -45,7 +51,10 @@ def send_telegram():
 
 @app.route('/send', methods=['POST', 'GET'])
 @authenticate
-def send_post():
+def send_request():
+    """
+    Handle GET/POST requests to send data to a specified URL.
+    """
     method = request.method
     data = request.get_json()
     url = data.get('url')
@@ -66,6 +75,9 @@ def send_post():
 
 @app.route('/', methods=['GET'])
 def index():
+    """
+    Health check endpoint.
+    """
     return jsonify({"message": "Hello, World!"}), 200
 
 if __name__ == '__main__':
