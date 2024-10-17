@@ -49,7 +49,7 @@ def send_telegram():
         'chat_id': telegram_chat_id,
         'text': text
     }
-    response = requests.post(url, json=payload)
+    response = requests.post(url, json=payload, timeout=30)
     return response.json()
 
 @app.route('/send', methods=['POST', 'GET'])
@@ -66,9 +66,9 @@ def send_request():
     if url is None:
         return jsonify({"error": "URL is required"}), 400
     if method == 'GET':
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=headers, timeout=30)
     elif method == 'POST':
-        response = requests.post(url, json=json_payload, headers=headers)
+        response = requests.post(url, json=json_payload, headers=headers, timeout=30)
     else:
         return jsonify({"error": f"Method {method} is not supported"}), 400
     return response.json(), response.status_code
