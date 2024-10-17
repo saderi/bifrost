@@ -43,9 +43,30 @@ def send_telegram():
     response = requests.post(url, json=payload)
     return response.json()
 
+@app.route('/send', methods=['POST', 'GET'])
+@authenticate
+def send_post():
+    method = request.method
+    data = request.get_json()
+    url = data.get('url')
+    json_payload = data.get('json_payload')
+    headers = data.get('headers') if data.get('headers') else None
+    if url is None:
+        return jsonify({"error": "URL is required"}), 400
+    
+    if method == 'GET':
+        response = requests.get(url, headers=headers)
+    elif method == 'POST':
+        response = requests.post(url, json=json_payload, headers=headers)
+    else:
+        return jsonify({"error": f"Method {method} is not supported"}), 400
+    
+    return response.json(), response.status_code
+
+
 @app.route('/', methods=['GET'])
 def index():
-    return jsonify({"message": "Hello, World!"}, 200)
+    return jsonify({"message": "Hello, World!"}), 200
 
 if __name__ == '__main__':
     app.run()

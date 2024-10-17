@@ -4,8 +4,7 @@ Some countries have restrictions on the internet, and some services are blocked.
 
 This is a simple API to pypass API calls to some services, for now it only has a endpoint to send messages to a telegram chat. but it can be easily extended to other services.
 
-**Note:** Its not stored any chat or other information, it just forwards the message to the service. but in the future i'll try to find a way to prevent any kind of MITM attack.
-
+**Note:** It doesn't store any information; it just forwards the message to the service. However, in the future, I may try to find a way to prevent any kind of MITM attack.
 
 ## Setup
 
@@ -26,7 +25,9 @@ This is a simple API to pypass API calls to some services, for now it only has a
     ```sh
     cp .env.example .env
     ```
-    Update `TOKEN_SECRET` in the `.env` file. this token will be used to authenticate the requests. IS NOT RELATED TO THE TELEGRAM TOKEN.
+    Update `TOKEN_SECRET` in the `.env` file. this token will be used to authenticate the requests.
+    
+    **NOTE:** This token is not related to requests you want to send, its just for this API to authenticate the requests.
 ## Running the Application
 
 Start the Flask application for development
@@ -53,10 +54,33 @@ sudo systemctl enable bifrost.service
 | Endpoint | Method | Description |
 | --- | --- | --- |
 | `/` | GET | Health check endpoint. |
+| `/send` | GET, POST | Send GET and POST to a URL. |
 | `/send_telegram` | POST | Send a message to a telegram chat. |
 
+## Send request to a URL
+You can send a GET or POST request to a URL using `/send`  endpoint. json example:
+```json
+{
+    "url": "TARGET_API_URL",
+    "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer TARGET_API_TOKEN if needed"
+    },
+    "json_payload": {
+            "field1": "value1",
+            "field2": "value2"
+        }
+}
+```
 
-## send_telegram
+**Important Notes:**
+* Only `url` is required, `headers` and `json_payload` are optional. 
+* method will be determined by the method of the request.
+* `json_payload` will be sent only if the request is a POST request as a json payload.
+* response will be exactly the response from the target API with the status code.
+
+
+## Send a message to a telegram chat
 You can send a message to a telegram chat using this endpoint. requieres fields:
 - `chat_id`: The chat id of the chat you want to send the message to.
 - `message`: The message you want to send.
@@ -75,5 +99,4 @@ curl --location 'http://127.0.0.1:5000/send_telegram' \
     "text": "YOUR TEST"
 }'
 ```
-
 Response will be exactly the response from the telegram API.
