@@ -6,9 +6,18 @@ This is a simple API to pypass API calls to some services, for now it only has a
 
 **Note:** It doesn't store any information; it just forwards the message to the service. However, in the future, I may try to find a way to prevent any kind of MITM attack.
 
-## Setup
+## How to Install
 
-1. **Clone the repository and Create and activate a virtual environment
+### 🐳 Docker
+```
+docker run -d -p 5000:5000 -e BIFROST_ACCESS_TOKEN=your_secret_token saderi/bifrost:latest
+```
+Bifrost will be available at http://localhost:5000.
+
+
+### 💪🏻 Non-Docker
+
+1. Clone the repository and Create and activate a virtual environment
     ```sh
     git clone https://github.com/saderi/bifrost.git /opt/bifrost
     cd /opt/bifrost
@@ -16,38 +25,22 @@ This is a simple API to pypass API calls to some services, for now it only has a
     source venv/bin/activate
     ```
 
-3. **Install dependencies:**
+3. Install dependencies:
     ```sh
     pip install -r requirements.txt
     ```
 
-4. **Create a `.env` file:**
+4. Create a `.env` file:
     ```sh
     cp .env.example .env
     ```
-    Update `TOKEN_SECRET` in the `.env` file. this token will be used to authenticate the requests.
+    Update `BIFROST_ACCESS_TOKEN` in the `.env` file. this token will be used to authenticate the requests.
     
-    **NOTE:** This token is not related to requests you want to send, its just for this API to authenticate the requests.
-## Running the Application
+5. Start the Flask application for development
 
-Start the Flask application for development
-
-```sh
-flask run
-```
-
-**Some notes for production:**
-
-If you want to run it in production do not expose the flask app directly to the internet, use a reverse proxy like nginx or apache.
-
-You can get systemd service file from the repository and use it to start the service using systemd.
-
-```sh
-sudo cp bifrost.service /etc/systemd/system/
-sudo systemctl daemon-reload
-sudo systemctl start bifrost.service
-sudo systemctl enable bifrost.service
-```
+    ```sh
+    flask run
+    ```
 
 ## Endpoints
 
