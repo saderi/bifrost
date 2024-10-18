@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 app = Flask(__name__)
-API_ACCESS_TOKEN = os.getenv('API_ACCESS_TOKEN', 'default_secret_token')
+BIFROST_ACCESS_TOKEN = os.getenv('BIFROST_ACCESS_TOKEN', 'default_secret_token')
 
 
 def authenticate(f):
@@ -20,7 +20,7 @@ def authenticate(f):
         if not auth_header or not auth_header.startswith('Bearer '):
             return jsonify({"error": "Unauthorized"}), 401
         token = auth_header.split(' ')[1]
-        if token != API_ACCESS_TOKEN:
+        if token != BIFROST_ACCESS_TOKEN:
             return jsonify({"error": "Unauthorized"}), 401
         return f(*args, **kwargs)
     wrapper.__name__ = f.__name__
