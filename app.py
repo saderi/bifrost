@@ -1,7 +1,10 @@
+"""
+This module contains the main application code for a Flask web server.
+"""
+import os
 import requests
 from flask import Flask, request, jsonify
 from dotenv import load_dotenv
-import os
 
 load_dotenv()
 app = Flask(__name__)
@@ -9,6 +12,9 @@ API_ACCESS_TOKEN = os.getenv('API_ACCESS_TOKEN', 'default_secret_token')
 
 
 def authenticate(f):
+    """
+    Decorator function to authenticate requests using a Bearer token.
+    """
     def wrapper(*args, **kwargs):
         auth_header = request.headers.get('Authorization')
         if not auth_header or not auth_header.startswith('Bearer '):
@@ -23,6 +29,9 @@ def authenticate(f):
 @app.route('/send_telegram', methods=['POST'])
 @authenticate
 def send_telegram():
+    """
+    Handle POST requests to send a message to a Telegram chat.
+    """
     data = request.get_json()
     telegram_bot_token = data.get('telegram_bot_token')
     telegram_chat_id = data.get('telegram_chat_id')
@@ -40,12 +49,15 @@ def send_telegram():
         'chat_id': telegram_chat_id,
         'text': text
     }
-    response = requests.post(url, json=payload)
+    response = requests.post(url, json=payload, timeout=30)
     return response.json()
 
 @app.route('/send', methods=['POST', 'GET'])
 @authenticate
-def send_post():
+def send_request():
+    """
+    Handle GET/POST requests to send data to a specified URL.
+    """
     method = request.method
     data = request.get_json()
     url = data.get('url')
@@ -53,19 +65,20 @@ def send_post():
     headers = data.get('headers') if data.get('headers') else None
     if url is None:
         return jsonify({"error": "URL is required"}), 400
-    
     if method == 'GET':
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=headers, timeout=30)
     elif method == 'POST':
-        response = requests.post(url, json=json_payload, headers=headers)
+        response = requests.post(url, json=json_payload, headers=headers, timeout=30)
     else:
         return jsonify({"error": f"Method {method} is not supported"}), 400
-    
     return response.json(), response.status_code
 
 
 @app.route('/', methods=['GET'])
 def index():
+    """
+    Health check endpoint.
+    """
     return jsonify({"message": "Hello, World!"}), 200
 
 if __name__ == '__main__':
