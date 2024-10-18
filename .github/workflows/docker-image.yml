@@ -22,9 +22,5 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          platforms: 
-            - linux/amd64 
-            - linux/arm64
-          tags: 
-            - saderi/bifrost:latest
-            - saderi/bifrost:${{ github.ref_name }}
+          platforms: linux/amd64
+          tags: saderi/bifrost:latest
